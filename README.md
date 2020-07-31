@@ -1,4 +1,4 @@
-								      REPOSITORY OF GAMES 
+				REPOSITORY OF GAMES 
 Note: I own none of these games, this document is protected under the GPL license, it also includes games with a GPL License that have been included in this project with a GPL License.
 These games either run by themselves or in a folder depending on other .js and .css files.
 I hope you like my first repository.
