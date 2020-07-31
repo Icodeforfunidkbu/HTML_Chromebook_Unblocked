@@ -1,0 +1,113 @@
+<canvas id="jumpman" width="800" height="600"></canvas>
+<script>
+px=py=200;
+xv=yv=0;
+grav=0.5;
+onG=false;
+holdLeft=holdRight=false;
+plat=[];
+score=-1;
+window.onload=function() {
+    canvas=document.getElementById("jumpman");
+    map=canvas.getContext("2d");
+    map.font="30px Arial";
+    setInterval(update,1000/30);
+    document.addEventListener("keydown",keyDown);
+    document.addEventListener("keyup",keyUp);
+    refresh();
+}
+function refresh() {
+    score++;
+    plat=[];
+    plat.push({
+        x:0,
+        y:canvas.height-20,
+        w:canvas.width,
+        h:200,
+        c:"#cccccc"
+    });
+    for(i=0;i<50;i++) {
+        plat.push(
+        {
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        w:Math.random()*100+30,
+        h:Math.random()*30+20,
+        c:"#cccccc"
+        }
+        );
+    }
+    plat.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height*.6,
+        w:Math.random()*100+30,
+        h:Math.random()*30+35,
+        c:"#009900"
+    });
+}
+function update() {
+    if(holdLeft) {
+        xv=-4;
+    }
+    if(holdRight) {
+        xv=4;
+    }
+    px+=xv;
+    py+=yv;
+    if(onG) {
+        xv *= 0.8;
+    } else {
+        yv += grav;
+    }
+ 
+    onG=false;
+    for(i=0;i<52;i++) {
+        if(px>plat[i].x && px<plat[i].x+plat[i].w &&
+            py>plat[i].y && py<plat[i].y+plat[i].h) {
+            if(plat[i].c == "#009900"){refresh(); return;}
+            py=plat[i].y;
+            onG=true;
+        }
+    }
+ 
+    map.fillStyle="black";
+    map.fillRect(0,0,canvas.width,canvas.height);
+    for(i=0;i<52;i++) {
+        map.fillStyle=plat[i].c;
+        map.fillRect(plat[i].x,plat[i].y,plat[i].w,plat[i].h);
+    }
+    map.fillStyle="white";
+    map.fillRect(px-5,py-20,10,20);
+    map.fillText(score,10,40);
+}
+function keyDown(evt) {
+    switch(evt.keyCode) {
+        case 37:
+            holdLeft=true;
+            break;
+        case 38:
+            if(onG) {
+                yv=-10;
+            }
+            break;
+        case 39:
+            holdRight=true;
+            break;
+    }
+}
+function keyUp(evt) {
+    switch(evt.keyCode) {
+        case 37:
+            holdLeft=false;
+            break;
+        case 38:
+            if(yv<-3) {
+                yv=-3;
+            }
+            break;
+        case 39:
+            holdRight=false;
+            break;
+    }
+}
+</script>
